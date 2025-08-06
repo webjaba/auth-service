@@ -112,7 +112,7 @@ func (x *CreateUserResponse) GetUser() *User {
 type User struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Login         string                 `protobuf:"bytes,2,opt,name=login,proto3" json:"login,omitempty"`
+	Username      string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
 	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -155,9 +155,9 @@ func (x *User) GetId() int64 {
 	return 0
 }
 
-func (x *User) GetLogin() string {
+func (x *User) GetUsername() string {
 	if x != nil {
-		return x.Login
+		return x.Username
 	}
 	return ""
 }
@@ -179,10 +179,10 @@ const file_api_api_proto_rawDesc = "" +
 	".auth.UserR\x04user\"4\n" +
 	"\x12CreateUserResponse\x12\x1e\n" +
 	"\x04user\x18\x01 \x01(\v2\n" +
-	".auth.UserR\x04user\"H\n" +
+	".auth.UserR\x04user\"N\n" +
 	"\x04User\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
-	"\x05login\x18\x02 \x01(\tR\x05login\x12\x1a\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1a\n" +
+	"\busername\x18\x02 \x01(\tR\busername\x12\x1a\n" +
 	"\bpassword\x18\x03 \x01(\tR\bpassword2N\n" +
 	"\vAuthService\x12?\n" +
 	"\n" +

@@ -1,6 +1,7 @@
 package app
 
 import (
+	"auth-service/internal/pkg/mapper"
 	"auth-service/internal/pkg/pb"
 	"context"
 )
@@ -10,5 +11,10 @@ type Auth interface {
 }
 
 func (s *Service) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
-	return nil, nil
+	domainUser := mapper.User(in.GetUser())
+	err := s.store.InsertUser(domainUser)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.CreateUserResponse{User: mapper.UserProto(domainUser)}, nil
 }

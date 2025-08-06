@@ -1,20 +1,23 @@
 package main
 
 import (
+	"auth-service/cmd/configurations"
 	"auth-service/internal/app"
-	"auth-service/internal/pkg/configuration"
+	"auth-service/internal/pkg/store"
+
 	"log"
+
+	"google.golang.org/grpc"
 )
 
 func main() {
-	cfg := configuration.ServerConfig{
-		Host: "localhost",
-		Port: "50001",
-	}
+	server := grpc.NewServer()
 
-	service := app.New()
+	store := store.MustNew(configurations.StoreConfig)
 
-	if err := service.Start(cfg); err != nil {
+	service := app.New(server, store)
+
+	if err := service.Start(configurations.ServiceConfig); err != nil {
 		log.Fatalf("%s", err)
 	}
 }

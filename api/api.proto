@@ -17,7 +17,7 @@ message CreateUserResponse {
 }
 
 message User {
-    int64 id = 1;
-    string login = 2;
+    int64  id       = 1;
+    string username = 2;
     string password = 3;
 }

@@ -3,6 +3,7 @@ package app
 import (
 	"auth-service/internal/pkg/configuration"
 	"auth-service/internal/pkg/pb"
+	"auth-service/internal/pkg/store"
 	"fmt"
 	"net"
 
@@ -11,27 +12,27 @@ import (
 )
 
 type IService interface {
-	Start(configuration.ServerConfig) error
+	Start(*configuration.ServerConfig) error
 	Auth
 }
 
 type Service struct {
 	pb.UnimplementedAuthServiceServer
 	server *grpc.Server
+	store  store.IStore
 }
 
-func New() IService {
-	server := grpc.NewServer()
-
+func New(server *grpc.Server, store store.IStore) IService {
 	service := &Service{
 		server: server,
+		store:  store,
 	}
 
 	pb.RegisterAuthServiceServer(server, service)
 	return service
 }
 
-func (s Service) Start(cfg configuration.ServerConfig) error {
+func (s Service) Start(cfg *configuration.ServerConfig) error {
 	reflection.Register(s.server)
 
 	lis, err := net.Listen("tcp", fmt.Sprintf("%s:%s", cfg.Host, cfg.Port))
