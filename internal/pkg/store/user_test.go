@@ -15,8 +15,10 @@ func Test_InsertUser(t *testing.T) {
 	var (
 		insertUserError error
 		dublicateError  error
-		cleanupError    error
 	)
+
+	// cleanup
+	defer cleanup(t, store)
 
 	// test
 	_, insertUserError = store.InsertUser(domain.User{
@@ -29,14 +31,15 @@ func Test_InsertUser(t *testing.T) {
 		Password: "test_insert_user",
 	})
 
-	// cleanup
-	_, cleanupError = store.db.Exec(`
-	DELETE FROM users 
-	WHERE username = 'test_insert_user'
-	`)
-
 	// error check
 	require.NoError(t, insertUserError, "insert_user_error")
 	require.Error(t, dublicateError, "insert_dublicate_error")
+}
+
+func cleanup(t *testing.T, store *Store) {
+	_, cleanupError := store.db.Exec(`
+	DELETE FROM users 
+	WHERE username = 'test_insert_user'
+	`)
 	require.NoError(t, cleanupError, "cleanup_error")
 }
