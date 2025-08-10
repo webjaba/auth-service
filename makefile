@@ -7,6 +7,9 @@ generate:
 make run:
 	go run $(MAIN)
 
+make db-start:
+	docker start /auth-service-postgres
+
 make db-up:
 	goose -dir ./migrations postgres $(PGDNS) up
 

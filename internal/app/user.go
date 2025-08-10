@@ -12,7 +12,8 @@ type Auth interface {
 
 func (s *Service) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
 	domainUser := mapper.User(in.GetUser())
-	err := s.store.InsertUser(domainUser)
+	id, err := s.store.InsertUser(*domainUser)
+	domainUser.ID = id
 	if err != nil {
 		return nil, err
 	}

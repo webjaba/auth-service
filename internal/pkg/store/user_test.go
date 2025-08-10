@@ -9,43 +9,33 @@ import (
 )
 
 func Test_InsertUser(t *testing.T) {
-	t.Run("ok", func(t *testing.T) {
-		store := MustNew(configurations.StoreConfig)
+	// setup
+	store := MustNew(configurations.StoreConfig)
+	var (
+		insertUserError error
+		dublicateError  error
+		cleanupError    error
+	)
 
-		err := store.InsertUser(&domain.User{
-			Username: "test_insert_user",
-			Password: "test_insert_user",
-		})
-
-		require.NoError(t, err, "insert.user.error")
-
-		_, err = store.db.Exec(`
-		DELETE FROM users 
-		WHERE username = 'test_insert_user' 
-		AND PASSWORD = 'test_insert_user'
-		`)
-		require.NoError(t, err, "cleanup.error")
+	// test
+	_, insertUserError = store.InsertUser(domain.User{
+		Username: "test_insert_user",
+		Password: "test_insert_user",
 	})
-	t.Run("dublicate", func(t *testing.T) {
-		store := MustNew(configurations.StoreConfig)
 
-		err := store.InsertUser(&domain.User{
-			Username: "test_insert_user",
-			Password: "test_insert_user",
-		})
-		require.NoError(t, err, "insert.user.error")
-
-		err = store.InsertUser(&domain.User{
-			Username: "test_insert_user",
-			Password: "test_insert_user",
-		})
-		require.Error(t, err, "insert.dublicate.error")
-
-		_, err = store.db.Exec(`
-		DELETE FROM users 
-		WHERE username = 'test_insert_user' 
-		AND PASSWORD = 'test_insert_user'
-		`)
-		require.NoError(t, err, "cleanup.error")
+	_, dublicateError = store.InsertUser(domain.User{
+		Username: "test_insert_user",
+		Password: "test_insert_user",
 	})
+
+	// cleanup
+	_, cleanupError = store.db.Exec(`
+	DELETE FROM users 
+	WHERE username = 'test_insert_user'
+	`)
+
+	// error check
+	require.NoError(t, insertUserError, "insert_user_error")
+	require.Error(t, dublicateError, "insert_dublicate_error")
+	require.NoError(t, cleanupError, "cleanup_error")
 }
