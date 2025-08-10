@@ -1,7 +1,8 @@
 package app
 
 import (
-	"auth-service/internal/pkg/configuration"
+	"auth-service/internal/pkg/config"
+	jwttoken "auth-service/internal/pkg/jwt_token"
 	"auth-service/internal/pkg/pb"
 	"auth-service/internal/pkg/store"
 	"fmt"
@@ -12,27 +13,29 @@ import (
 )
 
 type IService interface {
-	Start(*configuration.ServerConfig) error
+	Start(*config.ServerConfig) error
 	Auth
 }
 
 type Service struct {
 	pb.UnimplementedAuthServiceServer
-	server *grpc.Server
-	store  store.IStore
+	server     *grpc.Server
+	store      store.IStore
+	jwtManager *jwttoken.JWTManager
 }
 
-func New(server *grpc.Server, store store.IStore) IService {
+func New(server *grpc.Server, store store.IStore, jwtManager *jwttoken.JWTManager) IService {
 	service := &Service{
-		server: server,
-		store:  store,
+		server:     server,
+		store:      store,
+		jwtManager: jwtManager,
 	}
 
 	pb.RegisterAuthServiceServer(server, service)
 	return service
 }
 
-func (s Service) Start(cfg *configuration.ServerConfig) error {
+func (s Service) Start(cfg *config.ServerConfig) error {
 	reflection.Register(s.server)
 
 	lis, err := net.Listen("tcp", fmt.Sprintf("%s:%s", cfg.Host, cfg.Port))

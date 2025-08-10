@@ -1,8 +1,9 @@
 package main
 
 import (
-	"auth-service/cmd/configurations"
 	"auth-service/internal/app"
+	"auth-service/internal/pkg/config"
+	jwttoken "auth-service/internal/pkg/jwt_token"
 	"auth-service/internal/pkg/store"
 
 	"log"
@@ -11,13 +12,17 @@ import (
 )
 
 func main() {
+	config.MustLoadEnv("")
+
+	jwtManager := jwttoken.NewManager(config.LoadJWTConfig())
+
 	server := grpc.NewServer()
 
-	store := store.MustNew(configurations.StoreConfig)
+	store := store.MustNew(config.LoadStoreConfig())
 
-	service := app.New(server, store)
+	service := app.New(server, store, jwtManager)
 
-	if err := service.Start(configurations.ServiceConfig); err != nil {
+	if err := service.Start(config.LoadServerConfig()); err != nil {
 		log.Fatalf("%s", err)
 	}
 }

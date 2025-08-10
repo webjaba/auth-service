@@ -1,7 +1,7 @@
 package store
 
 import (
-	"auth-service/cmd/configurations"
+	"auth-service/internal/pkg/config"
 	"auth-service/internal/pkg/domain"
 	"testing"
 
@@ -10,7 +10,8 @@ import (
 
 func Test_InsertUser(t *testing.T) {
 	// setup
-	store := MustNew(configurations.StoreConfig)
+	config.MustLoadEnv("../../../.env")
+	store := MustNew(config.LoadStoreConfig())
 	var (
 		insertUserError error
 		dublicateError  error

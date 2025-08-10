@@ -1,7 +1,7 @@
 package store
 
 import (
-	"auth-service/internal/pkg/configuration"
+	"auth-service/internal/pkg/config"
 	"log"
 
 	_ "github.com/lib/pq"
@@ -17,7 +17,7 @@ type Store struct {
 	db *sqlx.DB
 }
 
-func MustNew(cfg *configuration.StoreConfig) *Store {
+func MustNew(cfg *config.StoreConfig) *Store {
 	db, err := sqlx.Connect("postgres", cfg.DSN())
 	if err != nil {
 		log.Fatalf("db connection error: %s", err)
