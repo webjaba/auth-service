@@ -8,32 +8,28 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func Test_InsertUser(t *testing.T) {
+func TestUser(t *testing.T) {
 	// setup
 	config.MustLoadEnv("../../../.env")
 	store := MustNew(config.LoadStoreConfig())
-	var (
-		insertUserError error
-		dublicateError  error
-	)
-
+	user := domain.User{
+		Username: "test_insert_user",
+		Password: "test_insert_user",
+	}
 	// cleanup
 	defer cleanup(t, store)
 
 	// test
-	_, insertUserError = store.InsertUser(domain.User{
-		Username: "test_insert_user",
-		Password: "test_insert_user",
-	})
+	id, err := store.InsertUser(user)
+	require.NoError(t, err, "InsertUser.error.first")
 
-	_, dublicateError = store.InsertUser(domain.User{
-		Username: "test_insert_user",
-		Password: "test_insert_user",
-	})
+	created, err := store.GetUserByID(id)
+	require.NoError(t, err, "GetUserByID.error")
+	require.Equal(t, created.Username, user.Username, "GetUserByID.username")
 
-	// error check
-	require.NoError(t, insertUserError, "insert_user_error")
-	require.Error(t, dublicateError, "insert_dublicate_error")
+	_, err = store.InsertUser(user)
+	require.Error(t, err, "InsertUser.error.second")
+
 }
 
 func cleanup(t *testing.T, store *Store) {
