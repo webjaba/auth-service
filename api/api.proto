@@ -6,6 +6,9 @@ option go_package = "/internal/pkg/pb";
 
 service AuthService {
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+  rpc CreateToken(CreateTokenRequest) returns (CreateTokenResponse);
+  rpc RecreateToken(RecreateTokenRequest) returns (RecreateTokenResponse);
+  rpc VerifyToken(VerifyTokenRequest) returns (VerifyTokenResponse);
 }
 
 message CreateUserRequest {
@@ -20,4 +23,28 @@ message User {
     int64  id       = 1;
     string username = 2;
     string password = 3;
+}
+
+message CreateTokenRequest {
+    User user = 1;
+}
+
+message CreateTokenResponse {
+    string token = 1;
+}
+
+message VerifyTokenRequest {
+    string token = 1;
+}
+
+message VerifyTokenResponse {
+    bool isverified = 1;
+}
+
+message RecreateTokenRequest {
+    string token = 1;
+}
+
+message RecreateTokenResponse {
+    string token = 1;
 }

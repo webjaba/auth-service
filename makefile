@@ -4,20 +4,24 @@ PGDNS = "host=localhost user=postgres password=postgres dbname=auth port=5432 ss
 generate:
 	protoc --go_out=. --go-grpc_out=. api/api.proto
 
-make run:
+mockgen:
+	mockgen -destination=internal/pkg/mock/store.go -package=mock auth-service/internal/pkg/store IStore
+	mockgen -destination=internal/pkg/mock/jwt.go -package=mock auth-service/internal/pkg/jwt_token IJWTManager
+
+run:
 	go run $(MAIN)
 
-make db-start:
+db-start:
 	docker start /auth-service-postgres
 
-make db-up:
+db-up:
 	goose -dir ./migrations postgres $(PGDNS) up
 
-make db-down:
+db-down:
 	goose -dir ./migrations postgres $(PGDNS) down
 
-make db-create:
+db-create:
 	goose -dir ./migrations postgres $(PGDNS) create _ sql
 
-make dc-up:
+dc-up:
 	docker run -d --name auth-service-postgres -p 5432:5432 -e POSTGRES_DB=auth -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres postgres:15-alpine

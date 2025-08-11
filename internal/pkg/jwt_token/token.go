@@ -15,6 +15,12 @@ var (
 	errTokenExpired         = errors.New("expired token")
 )
 
+type IJWTManager interface {
+	CreateFromUser(user *domain.User) (string, error)
+	ParseToken(tokenString string) (*jwt.Token, error)
+	Validate(user *domain.User, token *jwt.Token) (bool, error)
+}
+
 type JWTManager struct {
 	*config.JWTConfig
 }
@@ -41,14 +47,20 @@ func (m *JWTManager) CreateFromUser(user *domain.User) (string, error) {
 	return signed, nil
 }
 
-func (m *JWTManager) Verify(user *domain.User, tokenString string) (bool, error) {
-	token, _ := jwt.Parse(tokenString, func(t *jwt.Token) (any, error) {
+func (m *JWTManager) ParseToken(tokenString string) (*jwt.Token, error) {
+	token, err := jwt.Parse(tokenString, func(t *jwt.Token) (any, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errUnknownSigningMethod
 		}
 		return m.SecretKey, nil
 	})
+	if err != nil {
+		return nil, err
+	}
+	return token, nil
+}
 
+func (m *JWTManager) Validate(user *domain.User, token *jwt.Token) (bool, error) {
 	sub, err := token.Claims.GetSubject()
 	if err != nil {
 		return false, err

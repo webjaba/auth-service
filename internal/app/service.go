@@ -21,10 +21,10 @@ type Service struct {
 	pb.UnimplementedAuthServiceServer
 	server     *grpc.Server
 	store      store.IStore
-	jwtManager *jwttoken.JWTManager
+	jwtManager jwttoken.IJWTManager
 }
 
-func New(server *grpc.Server, store store.IStore, jwtManager *jwttoken.JWTManager) IService {
+func New(server *grpc.Server, store store.IStore, jwtManager jwttoken.IJWTManager) IService {
 	service := &Service{
 		server:     server,
 		store:      store,

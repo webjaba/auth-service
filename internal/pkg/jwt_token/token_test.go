@@ -21,7 +21,11 @@ func TestToken(t *testing.T) {
 	tokenString, err := m.CreateFromUser(user)
 	require.NoError(t, err, "CreateFromUser.error")
 
-	verified, err := m.Verify(user, tokenString)
+	token, err := m.ParseToken(tokenString)
+	require.NoError(t, err, "ParseToken.error")
+	require.NotNil(t, token, "ParseToken.token")
+
+	verified, err := m.Validate(user, token)
 	require.NoError(t, err, "Verify.error")
 	require.True(t, verified, "Verify.verified")
 }
