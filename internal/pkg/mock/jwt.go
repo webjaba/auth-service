@@ -7,7 +7,6 @@ package mock
 import (
 	reflect "reflect"
 
-	jwt "github.com/golang-jwt/jwt/v5"
 	gomock "github.com/golang/mock/gomock"
 )
 
@@ -49,17 +48,17 @@ func (mr *MockIJWTMockRecorder) Create(arg0 interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockIJWT)(nil).Create), arg0)
 }
 
-// Parse mocks base method.
-func (m *MockIJWT) Parse(arg0 string) (*jwt.Token, error) {
+// ParseId mocks base method.
+func (m *MockIJWT) ParseId(arg0 string) (int, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Parse", arg0)
-	ret0, _ := ret[0].(*jwt.Token)
+	ret := m.ctrl.Call(m, "ParseId", arg0)
+	ret0, _ := ret[0].(int)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// Parse indicates an expected call of Parse.
-func (mr *MockIJWTMockRecorder) Parse(arg0 interface{}) *gomock.Call {
+// ParseId indicates an expected call of ParseId.
+func (mr *MockIJWTMockRecorder) ParseId(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Parse", reflect.TypeOf((*MockIJWT)(nil).Parse), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ParseId", reflect.TypeOf((*MockIJWT)(nil).ParseId), arg0)
 }

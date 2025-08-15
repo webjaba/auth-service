@@ -20,16 +20,16 @@ type IService interface {
 
 type Service struct {
 	pb.UnimplementedAuthServiceServer
-	server     *grpc.Server
-	store      store.IStore
-	jwtManager encrypt.IJWT
+	server *grpc.Server
+	store  store.IStore
+	jwt    encrypt.IJWT
 }
 
 func New(server *grpc.Server, store store.IStore, jwtManager encrypt.IJWT) IService {
 	service := &Service{
-		server:     server,
-		store:      store,
-		jwtManager: jwtManager,
+		server: server,
+		store:  store,
+		jwt:    jwtManager,
 	}
 
 	pb.RegisterAuthServiceServer(server, service)

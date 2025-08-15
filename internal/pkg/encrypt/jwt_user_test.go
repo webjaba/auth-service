@@ -9,13 +9,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func Test_Parse(t *testing.T) {
+func Test_parse(t *testing.T) {
 	tests := []struct {
-		name     string
-		setupJWT func() IJWT
-		setup    func() string
-		want     string
-		wantErr  bool
+		name    string
+		setup   func() string
+		want    string
+		wantErr bool
 	}{
 		{
 			name: "expired",
@@ -138,7 +137,7 @@ func Test_Parse(t *testing.T) {
 				SecretKey: []byte("key"),
 			})
 
-			token, err := j.Parse(tt.setup())
+			token, err := j.parse(tt.setup())
 			if tt.wantErr {
 				require.Error(t, err)
 				require.Nil(t, token)
@@ -161,11 +160,84 @@ func Test_Create(t *testing.T) {
 	token, err := j.Create(1)
 	require.NoError(t, err)
 
-	parsed, err := j.Parse(token)
+	parsed, err := j.parse(token)
 	require.NoError(t, err)
 
 	sub, err := parsed.Claims.GetSubject()
 	require.NoError(t, err)
 
 	require.Equal(t, sub, "1")
+}
+
+func Test_ParseId(t *testing.T) {
+	tests := []struct {
+		name    string
+		setup   func() string
+		want    int
+		wantErr bool
+	}{
+		{
+			name: "ok",
+			setup: func() string {
+				iat := time.Now()
+				exp := iat.Add(100 * time.Minute)
+				claims := jwt.MapClaims{
+					"sub": "1",
+					"exp": jwt.NewNumericDate(exp),
+					"iat": jwt.NewNumericDate(iat),
+				}
+
+				token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+				signed, _ := token.SignedString([]byte("key"))
+				return signed
+			},
+			want:    1,
+			wantErr: false,
+		},
+		{
+			name: "parsing error",
+			setup: func() string {
+				return "token"
+			},
+			want:    0,
+			wantErr: true,
+		},
+		{
+			name: "invalid subs",
+			setup: func() string {
+				iat := time.Now()
+				exp := iat.Add(100 * time.Minute)
+				claims := jwt.MapClaims{
+					"sub": "abc",
+					"exp": jwt.NewNumericDate(exp),
+					"iat": jwt.NewNumericDate(iat),
+				}
+
+				token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+				signed, _ := token.SignedString([]byte("key"))
+				return signed
+			},
+			want:    0,
+			wantErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			j := NewJWT(&config.JWTConfig{
+				SecretKey: []byte("key"),
+			})
+
+			got, err := j.ParseId(tt.setup())
+			if tt.wantErr {
+				require.Error(t, err)
+				require.Empty(t, got)
+				return
+			}
+			require.NoError(t, err)
+			require.Equal(t, tt.want, got)
+		})
+	}
 }

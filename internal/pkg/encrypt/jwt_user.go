@@ -8,11 +8,11 @@ import (
 )
 
 type iUser interface {
-	Parse(raw string) (*jwt.Token, error)
+	ParseId(raw string) (int, error)
 	Create(id int) (string, error)
 }
 
-func (j *JWT) Parse(raw string) (*jwt.Token, error) {
+func (j *JWT) parse(raw string) (*jwt.Token, error) {
 	token, err := j.parser.Parse(raw, func(t *jwt.Token) (any, error) {
 		return j.config.SecretKey, nil
 	})
@@ -38,4 +38,23 @@ func (j *JWT) Create(id int) (string, error) {
 		return "", err
 	}
 	return signed, nil
+}
+
+func (j *JWT) ParseId(raw string) (int, error) {
+	token, err := j.parse(raw)
+	if err != nil {
+		return 0, err
+	}
+
+	sub, err := token.Claims.GetSubject()
+	if err != nil {
+		return 0, err
+	}
+
+	id, err := strconv.Atoi(sub)
+	if err != nil {
+		return 0, err
+	}
+
+	return id, nil
 }
