@@ -8,7 +8,6 @@ service AuthService {
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
   rpc CreateToken(CreateTokenRequest) returns (CreateTokenResponse);
   rpc RecreateToken(RecreateTokenRequest) returns (RecreateTokenResponse);
-  rpc VerifyToken(VerifyTokenRequest) returns (VerifyTokenResponse);
 }
 
 message CreateUserRequest {
@@ -31,14 +30,6 @@ message CreateTokenRequest {
 
 message CreateTokenResponse {
     string token = 1;
-}
-
-message VerifyTokenRequest {
-    string token = 1;
-}
-
-message VerifyTokenResponse {
-    bool isverified = 1;
 }
 
 message RecreateTokenRequest {

@@ -9,12 +9,12 @@ import (
 type Setup struct {
 	Service
 	store      *mock.MockIStore
-	jwtManager *mock.MockIJWTManager
+	jwtManager *mock.MockIJWT
 }
 
 func MustSetup(ctrl *gomock.Controller) *Setup {
 	store := mock.NewMockIStore(ctrl)
-	jwtManager := mock.NewMockIJWTManager(ctrl)
+	jwtManager := mock.NewMockIJWT(ctrl)
 	return &Setup{
 		Service: Service{
 			store:      store,

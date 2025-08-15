@@ -20,12 +20,12 @@ func TestUser(t *testing.T) {
 	defer cleanup(t, store)
 
 	// test
-	id, err := store.InsertUser(user)
+	_, err := store.InsertUser(user)
 	require.NoError(t, err, "InsertUser.error.first")
 
-	created, err := store.GetUserByID(id)
-	require.NoError(t, err, "GetUserByID.error")
-	require.Equal(t, created.Username, user.Username, "GetUserByID.username")
+	created, err := store.FindUser("test_insert_user")
+	require.NoError(t, err, "FindUser.error")
+	require.Equal(t, created.Username, user.Username, "FindUser.username")
 
 	_, err = store.InsertUser(user)
 	require.Error(t, err, "InsertUser.error.second")

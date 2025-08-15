@@ -2,7 +2,7 @@ package app
 
 import (
 	"auth-service/internal/pkg/config"
-	jwttoken "auth-service/internal/pkg/jwt_token"
+	"auth-service/internal/pkg/encrypt"
 	"auth-service/internal/pkg/pb"
 	"auth-service/internal/pkg/store"
 	"fmt"
@@ -15,16 +15,17 @@ import (
 type IService interface {
 	Start(*config.ServerConfig) error
 	Auth
+	IJWT
 }
 
 type Service struct {
 	pb.UnimplementedAuthServiceServer
 	server     *grpc.Server
 	store      store.IStore
-	jwtManager jwttoken.IJWTManager
+	jwtManager encrypt.IJWT
 }
 
-func New(server *grpc.Server, store store.IStore, jwtManager jwttoken.IJWTManager) IService {
+func New(server *grpc.Server, store store.IStore, jwtManager encrypt.IJWT) IService {
 	service := &Service{
 		server:     server,
 		store:      store,

@@ -6,7 +6,7 @@ generate:
 
 mockgen:
 	mockgen -destination=internal/pkg/mock/store.go -package=mock auth-service/internal/pkg/store IStore
-	mockgen -destination=internal/pkg/mock/jwt.go -package=mock auth-service/internal/pkg/jwt_token IJWTManager
+	mockgen -destination=internal/pkg/mock/jwt.go -package=mock auth-service/internal/pkg/encrypt IJWT
 
 run:
 	go run $(MAIN)

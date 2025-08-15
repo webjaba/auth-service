@@ -18,14 +18,16 @@ type StoreConfig struct {
 }
 
 type JWTConfig struct {
-	DurationMin time.Duration
-	SecretKey   []byte
+	Duration  time.Duration
+	Leeway    time.Duration
+	SecretKey []byte
 }
 
 func LoadJWTConfig() *JWTConfig {
 	return &JWTConfig{
-		DurationMin: time.Duration(GetIntOrFatal(JWTTimeLimitMin)) * time.Minute,
-		SecretKey:   []byte(GetValueOrFatal(JWTSecretKey)),
+		Leeway:    time.Duration(GetIntOrFatal(JWTLeeway)) * time.Second,
+		Duration:  time.Duration(GetIntOrFatal(JWTTimeLimitMin)) * time.Minute,
+		SecretKey: []byte(GetValueOrFatal(JWTSecretKey)),
 	}
 }
 

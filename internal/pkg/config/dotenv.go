@@ -16,6 +16,7 @@ var (
 const (
 	JWTSecretKey    = "JWT_SECRET_KEY"
 	JWTTimeLimitMin = "JWT_TIME_LIMIT_MIN"
+	JWTLeeway       = "JWT_LEEWAY"
 
 	ServerHost = "SERVER_HOST"
 	ServerPort = "SERVER_PORT"

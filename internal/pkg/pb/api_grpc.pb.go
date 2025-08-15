@@ -22,7 +22,6 @@ const (
 	AuthService_CreateUser_FullMethodName    = "/auth.AuthService/CreateUser"
 	AuthService_CreateToken_FullMethodName   = "/auth.AuthService/CreateToken"
 	AuthService_RecreateToken_FullMethodName = "/auth.AuthService/RecreateToken"
-	AuthService_VerifyToken_FullMethodName   = "/auth.AuthService/VerifyToken"
 )
 
 // AuthServiceClient is the client API for AuthService service.
@@ -32,7 +31,6 @@ type AuthServiceClient interface {
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
 	CreateToken(ctx context.Context, in *CreateTokenRequest, opts ...grpc.CallOption) (*CreateTokenResponse, error)
 	RecreateToken(ctx context.Context, in *RecreateTokenRequest, opts ...grpc.CallOption) (*RecreateTokenResponse, error)
-	VerifyToken(ctx context.Context, in *VerifyTokenRequest, opts ...grpc.CallOption) (*VerifyTokenResponse, error)
 }
 
 type authServiceClient struct {
@@ -73,16 +71,6 @@ func (c *authServiceClient) RecreateToken(ctx context.Context, in *RecreateToken
 	return out, nil
 }
 
-func (c *authServiceClient) VerifyToken(ctx context.Context, in *VerifyTokenRequest, opts ...grpc.CallOption) (*VerifyTokenResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(VerifyTokenResponse)
-	err := c.cc.Invoke(ctx, AuthService_VerifyToken_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // AuthServiceServer is the server API for AuthService service.
 // All implementations must embed UnimplementedAuthServiceServer
 // for forward compatibility.
@@ -90,7 +78,6 @@ type AuthServiceServer interface {
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
 	CreateToken(context.Context, *CreateTokenRequest) (*CreateTokenResponse, error)
 	RecreateToken(context.Context, *RecreateTokenRequest) (*RecreateTokenResponse, error)
-	VerifyToken(context.Context, *VerifyTokenRequest) (*VerifyTokenResponse, error)
 	mustEmbedUnimplementedAuthServiceServer()
 }
 
@@ -109,9 +96,6 @@ func (UnimplementedAuthServiceServer) CreateToken(context.Context, *CreateTokenR
 }
 func (UnimplementedAuthServiceServer) RecreateToken(context.Context, *RecreateTokenRequest) (*RecreateTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RecreateToken not implemented")
-}
-func (UnimplementedAuthServiceServer) VerifyToken(context.Context, *VerifyTokenRequest) (*VerifyTokenResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method VerifyToken not implemented")
 }
 func (UnimplementedAuthServiceServer) mustEmbedUnimplementedAuthServiceServer() {}
 func (UnimplementedAuthServiceServer) testEmbeddedByValue()                     {}
@@ -188,24 +172,6 @@ func _AuthService_RecreateToken_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AuthService_VerifyToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(VerifyTokenRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AuthServiceServer).VerifyToken(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: AuthService_VerifyToken_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).VerifyToken(ctx, req.(*VerifyTokenRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // AuthService_ServiceDesc is the grpc.ServiceDesc for AuthService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -224,10 +190,6 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RecreateToken",
 			Handler:    _AuthService_RecreateToken_Handler,
-		},
-		{
-			MethodName: "VerifyToken",
-			Handler:    _AuthService_VerifyToken_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

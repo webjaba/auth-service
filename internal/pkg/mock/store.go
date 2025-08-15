@@ -34,19 +34,19 @@ func (m *MockIStore) EXPECT() *MockIStoreMockRecorder {
 	return m.recorder
 }
 
-// GetUserByID mocks base method.
-func (m *MockIStore) GetUserByID(arg0 int) (*domain.User, error) {
+// FindUser mocks base method.
+func (m *MockIStore) FindUser(arg0 string) (*domain.User, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetUserByID", arg0)
+	ret := m.ctrl.Call(m, "FindUser", arg0)
 	ret0, _ := ret[0].(*domain.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetUserByID indicates an expected call of GetUserByID.
-func (mr *MockIStoreMockRecorder) GetUserByID(arg0 interface{}) *gomock.Call {
+// FindUser indicates an expected call of FindUser.
+func (mr *MockIStoreMockRecorder) FindUser(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserByID", reflect.TypeOf((*MockIStore)(nil).GetUserByID), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindUser", reflect.TypeOf((*MockIStore)(nil).FindUser), arg0)
 }
 
 // InsertUser mocks base method.

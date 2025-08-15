@@ -13,11 +13,11 @@ var (
 
 type IUser interface {
 	InsertUser(user domain.User) (int, error)
-	GetUserByID(id int) (*domain.User, error)
+	FindUser(username string) (*domain.User, error)
 }
 
 func (s *Store) InsertUser(user domain.User) (int, error) {
-	if ok := sqlInjectionCheck(user.Username); !ok {
+	if ok := validateString(user.Username); !ok {
 		return 0, errInvalidUsername
 	}
 	stmt, err := s.db.PrepareNamed(
@@ -39,16 +39,19 @@ func (s *Store) InsertUser(user domain.User) (int, error) {
 	return user.ID, nil
 }
 
-func (s *Store) GetUserByID(id int) (*domain.User, error) {
+func (s *Store) FindUser(username string) (*domain.User, error) {
+	if !validateString(username) {
+		return nil, errInvalidUsername
+	}
 	user := &domain.User{}
-	err := s.db.Get(user, "SELECT username, password FROM users WHERE id = $1", id)
+	err := s.db.Get(user, "SELECT id, username, password FROM users WHERE username = $1", username)
 	if err != nil {
 		return nil, err
 	}
 	return user, nil
 }
 
-func sqlInjectionCheck(value string) bool {
+func validateString(value string) bool {
 	incorrectSymbols := []string{"--", ";", "\"", " "}
 	for _, s := range incorrectSymbols {
 		cnt := strings.Count(value, s)
