@@ -3,6 +3,7 @@ package store
 import (
 	"auth-service/internal/pkg/config"
 	"log"
+	"time"
 
 	_ "github.com/lib/pq"
 
@@ -23,5 +24,13 @@ func MustNew(cfg *config.StoreConfig) *Store {
 		log.Fatalf("db connection error: %s", err)
 	}
 
+	db.SetConnMaxIdleTime(time.Duration(cfg.MaxIdleTime) * time.Minute)
+	db.SetMaxIdleConns(cfg.MaxIdleCons)
+	db.SetMaxOpenConns(cfg.MaxConns)
+
 	return &Store{db: db}
+}
+
+func (s *Store) Close() {
+	s.db.Close()
 }

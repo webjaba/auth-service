@@ -21,10 +21,13 @@ const (
 	ServerHost = "SERVER_HOST"
 	ServerPort = "SERVER_PORT"
 
-	DBHost     = "DB_HOST"
-	DBPort     = "DB_PORT"
-	DBUser     = "DB_USER"
-	DBPassword = "DB_PASSWORD"
+	DBHost       = "DB_HOST"
+	DBPort       = "DB_PORT"
+	DBUser       = "DB_USER"
+	DBPassword   = "DB_PASSWORD"
+	MaxIdleConns = "MAX_IDLE_CONNS"
+	MaxConns     = "MAX_CONNS"
+	MaxIdleTime  = "MAX_IDLE_TIME"
 )
 
 func MustLoadEnv(path string) {

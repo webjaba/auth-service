@@ -19,6 +19,7 @@ func main() {
 	server := grpc.NewServer()
 
 	store := store.MustNew(config.LoadStoreConfig())
+	defer store.Close()
 
 	service := app.New(server, store, jwt)
 

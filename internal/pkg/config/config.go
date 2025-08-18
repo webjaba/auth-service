@@ -11,10 +11,13 @@ type ServerConfig struct {
 }
 
 type StoreConfig struct {
-	Host     string
-	Port     string
-	User     string
-	Password string
+	Host        string
+	Port        string
+	User        string
+	Password    string
+	MaxIdleCons int
+	MaxIdleTime int
+	MaxConns    int
 }
 
 type JWTConfig struct {
@@ -39,12 +42,16 @@ func LoadServerConfig() *ServerConfig {
 	}
 }
 
+// Получить конфиг стора из .env файла
 func LoadStoreConfig() *StoreConfig {
 	return &StoreConfig{
-		Host:     GetValueOrFatal(DBHost),
-		Port:     GetValueOrFatal(DBPort),
-		User:     GetValueOrFatal(DBUser),
-		Password: GetValueOrFatal(DBPassword),
+		Host:        GetValueOrFatal(DBHost),
+		Port:        GetValueOrFatal(DBPort),
+		User:        GetValueOrFatal(DBUser),
+		Password:    GetValueOrFatal(DBPassword),
+		MaxIdleCons: GetIntOrFatal(MaxIdleConns),
+		MaxIdleTime: GetIntOrFatal(MaxIdleTime),
+		MaxConns:    GetIntOrFatal(MaxConns),
 	}
 }
 
