@@ -7,5 +7,5 @@ make create-token:
 	localhost:50011 auth.AuthService/CreateToken
 
 make recreate-token:
-	grpcurl -plaintext -d '{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTUyNjk5NDksImlhdCI6MTc1NTI2OTM0OSwic3ViIjoiNSJ9.6bFVBBTGOcIgL_BKnPUXQrbdgZPjROSQgAngLSvrjeg"}' \
+	grpcurl -plaintext -d '{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTU2Mjc1OTEsImlhdCI6MTc1NTYyNjk5MSwic3ViIjoiMjEifQ.Y8BJ9GdY5uqqExohG5QzHpb7KGuBMnJpYR_55VtDo38"}' \
 	localhost:50011 auth.AuthService/RecreateToken

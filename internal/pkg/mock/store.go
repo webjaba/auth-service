@@ -6,6 +6,7 @@ package mock
 
 import (
 	domain "auth-service/internal/pkg/domain"
+	context "context"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
@@ -35,31 +36,31 @@ func (m *MockIStore) EXPECT() *MockIStoreMockRecorder {
 }
 
 // FindUser mocks base method.
-func (m *MockIStore) FindUser(arg0 string) (*domain.User, error) {
+func (m *MockIStore) FindUser(arg0 context.Context, arg1 string) (*domain.User, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindUser", arg0)
+	ret := m.ctrl.Call(m, "FindUser", arg0, arg1)
 	ret0, _ := ret[0].(*domain.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // FindUser indicates an expected call of FindUser.
-func (mr *MockIStoreMockRecorder) FindUser(arg0 interface{}) *gomock.Call {
+func (mr *MockIStoreMockRecorder) FindUser(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindUser", reflect.TypeOf((*MockIStore)(nil).FindUser), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindUser", reflect.TypeOf((*MockIStore)(nil).FindUser), arg0, arg1)
 }
 
 // InsertUser mocks base method.
-func (m *MockIStore) InsertUser(arg0 domain.User) (int, error) {
+func (m *MockIStore) InsertUser(arg0 context.Context, arg1 domain.User) (int, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "InsertUser", arg0)
+	ret := m.ctrl.Call(m, "InsertUser", arg0, arg1)
 	ret0, _ := ret[0].(int)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // InsertUser indicates an expected call of InsertUser.
-func (mr *MockIStoreMockRecorder) InsertUser(arg0 interface{}) *gomock.Call {
+func (mr *MockIStoreMockRecorder) InsertUser(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InsertUser", reflect.TypeOf((*MockIStore)(nil).InsertUser), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InsertUser", reflect.TypeOf((*MockIStore)(nil).InsertUser), arg0, arg1)
 }

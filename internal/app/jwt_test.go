@@ -32,7 +32,7 @@ func Test_CreateToken(t *testing.T) {
 				require.NoError(t, err, "hash password error")
 
 				s.store.EXPECT().
-					FindUser(req.User.Username).
+					FindUser(gomock.Any(), req.User.Username).
 					Return(&domain.User{
 						ID:       1,
 						Username: req.User.Username,
@@ -56,7 +56,7 @@ func Test_CreateToken(t *testing.T) {
 				}
 
 				s.store.EXPECT().
-					FindUser(req.User.Username).
+					FindUser(gomock.Any(), req.User.Username).
 					Return(nil, errors.New("error"))
 
 				return
@@ -77,7 +77,7 @@ func Test_CreateToken(t *testing.T) {
 				require.NoError(t, err, "hash password error")
 
 				s.store.EXPECT().
-					FindUser(req.User.Username).
+					FindUser(gomock.Any(), req.User.Username).
 					Return(&domain.User{
 						ID:       1,
 						Username: req.User.Username,
@@ -102,7 +102,7 @@ func Test_CreateToken(t *testing.T) {
 				require.NoError(t, err, "hash password error")
 
 				s.store.EXPECT().
-					FindUser(req.User.Username).
+					FindUser(gomock.Any(), req.User.Username).
 					Return(&domain.User{
 						ID:       1,
 						Username: req.User.Username,

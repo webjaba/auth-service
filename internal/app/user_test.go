@@ -23,10 +23,13 @@ func TestCreateUser(t *testing.T) {
 			setup: func(s *Setup) *pb.CreateUserResponse {
 				s.store.
 					EXPECT().
-					InsertUser(domain.User{
-						Username: "user1",
-						Password: "password1",
-					}).Return(1, nil)
+					InsertUser(
+						gomock.Any(),
+						domain.User{
+							Username: "user1",
+							Password: "password1",
+						},
+					).Return(1, nil)
 				return &pb.CreateUserResponse{
 					User: &pb.User{
 						Id:       1,
@@ -48,10 +51,13 @@ func TestCreateUser(t *testing.T) {
 			setup: func(s *Setup) *pb.CreateUserResponse {
 				s.store.
 					EXPECT().
-					InsertUser(domain.User{
-						Username: "user1",
-						Password: "password1",
-					}).Return(0, errors.New("err"))
+					InsertUser(
+						gomock.Any(),
+						domain.User{
+							Username: "user1",
+							Password: "password1",
+						},
+					).Return(0, errors.New("err"))
 				return nil
 			},
 			in: &pb.CreateUserRequest{

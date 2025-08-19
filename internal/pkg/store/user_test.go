@@ -3,6 +3,7 @@ package store
 import (
 	"auth-service/internal/pkg/config"
 	"auth-service/internal/pkg/domain"
+	"context"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -20,14 +21,14 @@ func TestUser(t *testing.T) {
 	defer cleanup(t, store)
 
 	// test
-	_, err := store.InsertUser(user)
+	_, err := store.InsertUser(context.Background(), user)
 	require.NoError(t, err, "InsertUser.error.first")
 
-	created, err := store.FindUser("test_insert_user")
+	created, err := store.FindUser(context.Background(), "test_insert_user")
 	require.NoError(t, err, "FindUser.error")
 	require.Equal(t, created.Username, user.Username, "FindUser.username")
 
-	_, err = store.InsertUser(user)
+	_, err = store.InsertUser(context.Background(), user)
 	require.Error(t, err, "InsertUser.error.second")
 
 }

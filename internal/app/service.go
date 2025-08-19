@@ -14,7 +14,7 @@ import (
 
 type IService interface {
 	Start(*config.ServerConfig) error
-	Auth
+	IUser
 	IJWT
 }
 

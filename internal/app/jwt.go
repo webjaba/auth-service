@@ -17,7 +17,7 @@ type IJWT interface {
 }
 
 func (s *Service) CreateToken(ctx context.Context, in *pb.CreateTokenRequest) (*pb.CreateTokenResponse, error) {
-	domainUser, err := s.store.FindUser(in.User.Username)
+	domainUser, err := s.store.FindUser(ctx, in.User.Username)
 	if err != nil {
 		return nil, err
 	}

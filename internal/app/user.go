@@ -6,15 +6,13 @@ import (
 	"context"
 )
 
-type Auth interface {
+type IUser interface {
 	CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*pb.CreateUserResponse, error)
-	CreateToken(ctx context.Context, in *pb.CreateTokenRequest) (*pb.CreateTokenResponse, error)
-	RecreateToken(ctx context.Context, in *pb.RecreateTokenRequest) (*pb.RecreateTokenResponse, error)
 }
 
 func (s *Service) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
 	domainUser := mapper.User(in.GetUser())
-	id, err := s.store.InsertUser(*domainUser)
+	id, err := s.store.InsertUser(ctx, *domainUser)
 	domainUser.ID = id
 	if err != nil {
 		return nil, err
